@@ -1,267 +1,372 @@
-//
 #include <iostream>
-#include <cstdlib>
-#include <fstream>
-#include <string>
 #include <vector>
+#include <cstring>
+#include <fstream>
+#include <cstdlib>
+#include<array>
 
 using namespace std;
 
-void bubblesort (int A[], int n);
-void insertionsort(int A[], int n);
-void quicksort(int a[], int left, int right);
-void shellsort(int A[], int n);
-void mergesort(int *a, int low, int high);
-int comparisons = 0;
-int exchanges = 0;
+bool read_file(char * file_name,int  w[]);
+void bubbleSort(int num[]);
+void quickSort(int arr[], int left, int right, int &exchanges, int &comparisons);
+void insertion_sort (int arr[], int length);
+void shellsort(int v[], int n);
+void merge(int arr[], int l, int m, int r, int &exchanges, int &comparisons);
+void mergeSort(int arr[], int l, int r, int &exchanges, int &comparisons);
+void printVector(int vect[]);
 
-bool file_to_array(string file_name, int *& numbers)
+int main()
 {
-    ifstream thisfile;
-    thisfile.open (file_name.c_str());
+    int FewUnique[10000], NearlySorted[10000], Random[10000], Reversed[10000];
+    int exchanges, comparisons = 0;
+    int * mypointer = FewUnique;
+    read_file("FewUnique.txt", mypointer);
+    cout<<"Few Unique: \n";
+    bubbleSort(mypointer);
+    //printVector(mypointer);
+    mypointer=FewUnique;
+    read_file("FewUnique.txt", mypointer);
+    //printVector(mypointer);
+    cout<<"Few Unique: \n";
+    insertion_sort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=FewUnique;
+    read_file("FewUnique.txt", mypointer);
+    cout<<"Few Unique: \n";
+    shellsort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=FewUnique;
+    read_file("FewUnique.txt", mypointer);
+    quickSort(mypointer, 0, 10000 , exchanges, comparisons);
+    cout<<"Few Unique: \n";
+    cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    mypointer=FewUnique;
+    read_file("FewUnique.txt", mypointer);
+    mergeSort(mypointer, 0, 10000, exchanges, comparisons);
+    cout<<"Few Unique: \n";
+    cout<<"Number of exchanges for a merge sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a merge sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    delete mypointer;
+    cout<<"\n";
 
-    if(!thisfile.is_open())
-    {
-        cout << "Yo, can't find your file!" << file_name << endl;
-        cout << "Check the location, bro! \n";
-        return false;
-    }
-    string temp;
-    string file_content="";
-    while(thisfile.peek()!=EOF)
-    {
-        thisfile>>temp;
-        file_content += temp + " ";
-    }
-    thisfile.clear();
-    thisfile.close();
+    mypointer = NearlySorted;
+    read_file("NearlySorted.txt", mypointer);
+    cout<<"Nearly Sorted: \n";
+    bubbleSort(mypointer);
+    //printVector(mypointer);
+    mypointer=NearlySorted;
+    read_file("NearlySorted.txt", mypointer);
+    //printVector(mypointer);
+    cout<<"Nearly Sorted: \n";
+    insertion_sort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=NearlySorted;
+    read_file("NearlySorted.txt", mypointer);
+    cout<<"Nearly Sorted: \n";
+    shellsort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=NearlySorted;
+    read_file("NearlySorted.txt", mypointer);
+    quickSort(mypointer, 0, 10000 , exchanges, comparisons);
+    cout<<"Nearly Sorted: \n";
+    cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    mypointer=NearlySorted;
+    read_file("NearlySorted.txt", mypointer);
+    mergeSort(mypointer, 0, 10000, exchanges, comparisons);
+    cout<<"Nearly Sorted: \n";
+    cout<<"Number of exchanges for a merge sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a merge sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    delete mypointer;
+    cout<<"\n";
 
-    vector<string> lines;
-    temp= "";
-    for( int i = 0; i < file_content.length();i++)
-    {
-        if (file_content[i] == ' ')
-        {
-            lines.push_back(temp);
-            temp= "";
-        }
-        else
-        {
-            temp +=file_content[i];
-        }
-    }
-    if(numbers!=NULL) delete numbers;
-   numbers = new int[lines.size()];
-   for(int i=0; i<lines.size(); i++)
-    {
-        numbers[i]= atoi(lines[i].c_str());
-    }
-    return true;
+    mypointer = Random;
+    read_file("Random.txt", mypointer);
+    cout<<"Random: \n";
+    bubbleSort(mypointer);
+    //printVector(mypointer);
+    mypointer=Random;
+    read_file("Random.txt", mypointer);
+    //printVector(mypointer);
+    cout<<"Random: \n";
+    insertion_sort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=Random;
+    read_file("Random.txt", mypointer);
+    cout<<"Random: \n";
+    shellsort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=Random;
+    read_file("Random.txt", mypointer);
+    quickSort(mypointer, 0, 10000 , exchanges, comparisons);
+    cout<<"Random: \n";
+    cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    mypointer=Random;
+    read_file("Random.txt", mypointer);
+    mergeSort(mypointer, 0, 10000, exchanges, comparisons);
+    cout<<"Random: \n";
+    cout<<"Number of exchanges for a merge sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a merge sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    delete mypointer;
+    cout<<"\n";
+
+    mypointer = Reversed;
+    read_file("Reversed.txt", mypointer);
+    cout<<"Reversed: \n";
+    bubbleSort(mypointer);
+    //printVector(mypointer);
+    mypointer=Reversed;
+    read_file("Reversed.txt", mypointer);
+    //printVector(mypointer);
+    cout<<"Reversed: \n";
+    insertion_sort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=Reversed;
+    read_file("Reversed.txt", mypointer);
+    cout<<"Reversed: \n";
+    shellsort(mypointer, 10000);
+    //printVector(mypointer);
+    mypointer=Reversed;
+    read_file("Reversed.txt", mypointer);
+    quickSort(mypointer, 0, 10000 , exchanges, comparisons);
+    cout<<"Reversed: \n";
+    cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    mypointer=Reversed;
+    read_file("Reversed.txt", mypointer);
+    mergeSort(mypointer, 0, 10000, exchanges, comparisons);
+    cout<<"Reversed: \n";
+    cout<<"Number of exchanges for a merge sort: "<<exchanges<<endl;
+    cout<<"Number of comparisons for a merge sort: "<<comparisons<<endl;
+    exchanges = 0;
+    comparisons = 0;
+    delete mypointer;
+    cout<<"\n";
+
+
+    /*
+    read_file("FewUnique.txt", FewUnique3);
+    insertion_sort(FewUnique3, FewUnique3.size());
+    read_file("FewUnique.txt", FewUnique4);
+    shellsort(FewUnique4, FewUnique4.size());
+    read_file("FewUnique.txt", FewUnique5);
+    mergeSort(FewUnique5,0,FewUnique5.size());
+    */
+    read_file("NearlySorted.txt", NearlySorted);
+    read_file("Random.txt", Random);
+    read_file("Reversed.txt", Reversed);
+
+    //printVector(FewUnique);
+
+
+    /*cout<<FewUnique.size()<<endl;
+    cout<<NearlySorted.size()<<endl;
+    cout<<Random.size()<<endl;
+    cout<<Reversed.size()<<endl;
+    */
+
+    return 0;
 }
-
-int main(int argc, const char * argv[])
+void bubbleSort(int num[])
 {
-    int * allNumbers;
-    string fileNames[4];
-    fileNames[0] = "FewUnique.txt";
-    fileNames[1] = "NearlySorted.txt";
-    fileNames[2] = "Random.txt";
-    fileNames[3] = "Reversed.txt";
-    //int * test=file_to_array("Random.txt");
-
-    for(int i= 0;i<4; i++)
-    {
-       /*file_to_array(fileNames[i],allNumbers);
-       bubblesort(allNumbers,10000);
-       cout << comparisons << endl;
-       cout << exchanges << endl;*/
-
-       /*file_to_array(fileNames[i],allNumbers);
-       insertionsort(allNumbers,10000);
-       cout << comparisons << endl;
-       cout << exchanges << endl;*/
-
-       //int nums[] = {1,13,4,6,4,33,5,25,7,1};
-       //quicksort(nums,1,10);
-
-       file_to_array(fileNames[i], allNumbers);
-       quicksort(allNumbers,0,10000);
-       cout << comparisons << endl;
-       cout << exchanges << endl;
-
-       /*file_to_array(fileNames[i],allNumbers);
-       shellsort(allNumbers,10000);
-       cout << comparisons << endl;
-       cout << exchanges << endl;*/
-
-       /*file_to_array(fileNames[i],allNumbers);
-       mergesort(allNumbers,0,10000);
-       cout << comparisons << endl;
-       cout << exchanges << endl;*/
-
-    }
-}
-
-void bubblesort (int A[], int n)
-{
-    int i, j, temp;
-    for(i = 1; i < n; i++)
-    {
-        for(j = 0; j < n - 1; j++)
-        {
-            comparisons++;
-            if(A[j] > A[j + 1])
-            {
-                temp = A[j];
-                A[j] = A[j + 1];
-                A[j + 1] = temp;
-                exchanges++;
-            }
-        }
-    }
-}
-
-void insertionsort(int A[], int n)
-{
-    int i, j, element;
-    for(i = 1; i < n; i++)
-    {
-        element = A[i];
-        j = i;
-        comparisons++;
-        while ((j > 0) && (A[j - 1] > element))
-        {
-            comparisons++;
-            exchanges++;
-            A[j] = A[j - 1];
-            j = j - 1;
-        }
-        A[j] = element;
-    }
-}
-
-int partition(int a[], int left, int right, int pivotIndex)
-{
-    int pivot = a[pivotIndex];
-    do
-    {
-        while (a[left] < pivot)
-        {
-            left++;
-            comparisons++;
-        }
-        while (a[right] > pivot)
-        {
-            right--;
-            comparisons++;
-        }
-
-        if (left < right && a[left] != a[right])
-        {
-            swap(a[left], a[right]);
-            exchanges++;
-        }
-        else
-        {
-            return right;
-        }
-    }
-    while (left < right);
-    return right;
-}
-
-
-void quicksort(int a[], int left, int right)
-{
-    if (left < right)
-    {
-        int pivot = (left + right) / 2; // middle
-        int pivotNew = partition(a, left, right, pivot);
-        quicksort(a, left, pivotNew - 1);
-        quicksort(a, pivotNew + 1, right);
-    }
-}
-
-void shellsort(int A[], int n)
-{
-    int temp, gap, i;
-    int swapped;
-    gap = n/2;
-    do
-    {
-        do
-        {
-            swapped = 0;
-            for(i = 0; i < n - gap; i++)
-            {
+        int i, j, flag = 1;    // set flag to 1 to start first pass
+      int temp;
+      int comparisons, exchanges = 0;
+      int numLength = 10000;
+      for(i = 1; (i </*=*/ numLength); i++)
+     {
+          for (j=0; j < (numLength -1); j++)
+         {
                 comparisons++;
-                if(A[i] > A[i + gap])
-                {
-                    exchanges++;
-                    temp = A[i];
-                    A[i] = A[i + gap];
-                    A[i + gap] = temp;
-                    swapped = 1;
-                }
+               if (num[j+1] < num[j])      // ascending order simply changes to <
+              {
+                    temp = num[j];             // swap elements
+                    num[j] = num[j+1];
+                    num[j+1] = temp;
+                    exchanges++;         // indicates that a swap occurred.
+               }
+          }
+     }
+     cout<<"Number of exchanges for a bubble sort: "<<exchanges<<endl;
+     cout<<"Number of comparisons for a bubble sort: "<<comparisons<<endl;
+     return;   //arrays are passed to functions by address; nothing is returned
+}
+void insertion_sort (int arr[], int length){
+	 	int j, temp;
+	 	int comparisons, exchanges =0;
+
+	for (int i = 0; i < length; i++){
+		j = i;
+		comparisons++;
+
+		while (j > 0 && arr[j] < arr[j-1]){
+			  temp = arr[j];
+			  arr[j] = arr[j-1];
+			  arr[j-1] = temp;
+			  j--;
+			  exchanges++;
+			  }
+		}
+    cout<<"Number of exchanges for an insertion sort: "<<exchanges<<endl;
+     cout<<"Number of comparisons for an insertion sort: "<<comparisons<<endl;
+}
+void quickSort(int arr[], int left, int right, int &exchanges, int &comparisons) {
+      int i = left, j = right;
+      int tmp;
+      int pivot = arr[(left + right) / 2];
+      /* partition */
+      while (i <= j) {
+            while (arr[i] < pivot)
+                  i++;
+                  comparisons++;
+            while (arr[j] > pivot)
+                  j--;
+                  comparisons++;
+            if (i <= j) {
+                  tmp = arr[i];
+                  arr[i] = arr[j];
+                  arr[j] = tmp;
+                  i++;
+                  j--;
+                  exchanges++;
+            }
+      };
+      /* recursion */
+      if (left < j)
+            quickSort(arr, left, j, exchanges, comparisons);
+      if (i < right)
+            quickSort(arr, i, right, exchanges, comparisons);
+     //cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
+     //cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
+}
+void shellsort(int v[], int n)
+{
+    int comparisons, exchanges =0;
+    int gap, i, j, temp;
+    for (gap = n/2; gap > 0; gap /= 2){
+        for (i = gap; i < n; i++){
+            comparisons++;
+            for (j=i-gap; j>=0 && v[j]>v[j+gap]; j-=gap) {
+                temp = v[j];
+                v[j] = v[j+gap];
+                v[j+gap] = temp;
+                exchanges ++;
             }
         }
-        while(swapped == 1);
     }
-    while((gap = gap/2) >= 1);
+    cout<<"Number of exchanges for a shell sort: "<<exchanges<<endl;
+     cout<<"Number of comparisons for a shell sort: "<<comparisons<<endl;
 }
-
-void merge(int *a, int low, int high, int mid)
+void merge(int arr[], int l, int m, int r, int&exchanges, int&comparisons)
 {
-    int i, j, k, c[10000];
-    i = low;
-    k = low;
-    j = mid + 1;
-    while (i <= mid && j <= high)
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 =  r - m;
+    /* create temp arrays */
+    int L[n1], R[n2];
+    /* Copy data to temp arrays L[] and R[] */
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1+ j];
+    /* Merge the temp arrays back into arr[l..r]*/
+    i = 0; // Initial index of first subarray
+    j = 0; // Initial index of second subarray
+    k = l; // Initial index of merged subarray
+    while (i < n1 && j < n2)
     {
-        comparisons++;
-        if (a[i] < a[j])
+        comparisons ++;
+        if (L[i] <= R[j])
         {
-            c[k] = a[i];
-            k++;
+            arr[k] = L[i];
             i++;
-            comparisons++;
             exchanges++;
         }
         else
         {
-            c[k] = a[j];
-            k++;
+            arr[k] = R[j];
             j++;
             exchanges++;
         }
-    }
-    while (i <= mid)
-    {
-        c[k] = a[i];
         k++;
+    }
+    /* Copy the remaining elements of L[], if there
+       are any */
+    while (i < n1)
+    {
+        arr[k] = L[i];
         i++;
-    }
-    while (j <= high)
-    {
-        c[k] = a[j];
         k++;
-        j++;
     }
-    for (i = low; i < k; i++)
+
+    /* Copy the remaining elements of R[], if there
+       are any */
+    while (j < n2)
     {
-        a[i] = c[i];
+        arr[k] = R[j];
+        j++;
+        k++;
     }
 }
-
-void mergesort(int *a, int low, int high)
+/* l is for left index and r is right index of the
+   sub-array of arr to be sorted */
+void mergeSort(int arr[], int l, int r, int &exchanges, int &comparisons)
 {
-    int mid;
-    if (low < high)
+    if (l < r)
     {
-        mid=(low+high)/2;
-        mergesort(a,low,mid);
-        mergesort(a,mid+1,high);
-        merge(a,low,high,mid);
+        // Same as (l+r)/2, but avoids overflow for
+        // large l and h
+        int m = l+(r-l)/2;
+        // Sort first and second halves
+        mergeSort(arr, l, m, exchanges, comparisons);
+        mergeSort(arr, m+1, r, exchanges, comparisons);
+        merge(arr, l, m, r, exchanges, comparisons);
     }
-    return;
+}
+bool read_file(char * file_name,int w[])
+{
+    int i = 0;
+    ifstream in;
+    in.open(file_name);
+    if(!in.is_open()) return false;
+    char * word = new char [100];
+    int s_word;
+    while(in.peek()!=EOF)
+    {
+        in.getline(word,100,' ');
+        s_word=atoi(word);
+        //s_word=(int)word;
+        //w.push_back(s_word);
+        //w.push_back(word);
+        w[i] = s_word;
+        i++;
+    }
+    in.clear();
+    in.close();
+    return true;
+}
+void printVector(int vect[])
+{
+    for (int i =0; i <10000; i++)
+    {
+        cout<<vect[i]<<" ";
+    }
+    cout<<"\n";
 }
