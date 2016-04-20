@@ -218,9 +218,9 @@ void insertion_sort (int arr[], int length){
 
 	for (int i = 0; i < length; i++){ //traverse array
 		j = i;
-		comparisons++;
 
-		while (j > 0 ){
+		while (j > 0){
+            comparisons++;
            if( arr[j] < arr[j-1]){ //compare elements for ascending
                 temp = arr[j];  //swap elements
                 arr[j] = arr[j-1];
