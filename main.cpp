@@ -220,45 +220,49 @@ void insertion_sort (int arr[], int length){
 		j = i;
 		comparisons++;
 
-		while (j > 0 && arr[j] < arr[j-1]){ //compare elements for ascending
-			  temp = arr[j];  //swap elements
-			  arr[j] = arr[j-1];
-			  arr[j-1] = temp;
-			  j--;
-			  exchanges++;
-			  comparisons++;
-			  }
+		while (j > 0 ){
+           if( arr[j] < arr[j-1]){ //compare elements for ascending
+                temp = arr[j];  //swap elements
+                arr[j] = arr[j-1];
+                arr[j-1] = temp;
+                exchanges++;
+          }
+          j--;
 		}
+    }
     cout<<"Number of exchanges for an insertion sort: "<<exchanges<<endl;
      cout<<"Number of comparisons for an insertion sort: "<<comparisons<<endl;
 }
+int partition(int a[], int l, int r, int pivotIndex, int &exchange, int &comparisons)
+{
+    int pivot = a[pivotIndex];
+    do
+    {
+        comparisons++;
+        while (a[l] < pivot) l++;
+        while (a[r] > pivot) r--;
+        if (l <r && a[l]!=a[r])
+        {
+            swap(a[l], a[r]);
+            exchange++;
+        }
+        else
+        {
+            return r;
+        }
+    }
+    while (l<r);
+    return r;
+}
+
 void quickSort(int arr[], int left, int right, int &exchanges, int &comparisons) {
-      int i = left, j = right;
-      int tmp;
-      int pivot = arr[(left + right) / 2];
-      /* partition */
-     //run until low is less than high
-      while (i <= j) {
-            while (arr[i] < pivot) //
-                  i++;
-                  comparisons++;
-            while (arr[j] > pivot)
-                  j--;
-                  comparisons++;
-            if (i <= j) { //swap elements
-                  tmp = arr[i];
-                  arr[i] = arr[j];
-                  arr[j] = tmp;
-                  i++;
-                  j--;
-                  exchanges++;
-            }
-      };
-      /* recursion */
-      if (left < j) //recursion
-            quickSort(arr, left, j, exchanges, comparisons);
-      if (i < right) //recursion
-            quickSort(arr, i, right, exchanges, comparisons);
+     if(left<right)
+     {
+         int pivot = (left + right)/2; //middle
+         int pivotNew = partition(arr, left, right, pivot, exchanges, comparisons);
+         quickSort(arr, left, pivotNew -1, exchanges, comparisons);
+         quickSort(arr, pivotNew+1, right, exchanges, comparisons);
+     }
      //cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
      //cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
 }
@@ -275,7 +279,6 @@ void shellsort(int v[], int n)
                 v[j] = v[j+gap];
                 v[j+gap] = temp;
                 exchanges ++;
-                comparisons++;
             }
         }
     }
@@ -311,7 +314,7 @@ void merge(int arr[], int l, int m, int r, int&exchanges, int&comparisons)
         {
             arr[k] = R[j];
             j++;
-            exchanges++;
+            //exchanges++;
         }
         k++;
     }
