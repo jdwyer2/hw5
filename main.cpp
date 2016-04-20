@@ -184,18 +184,20 @@ int main()
 
     return 0;
 }
+//BubbleSort
 void bubbleSort(int num[])
 {
-        int i, j, flag = 1;    // set flag to 1 to start first pass
+        int i, j;
       int temp;
-      int comparisons, exchanges = 0;
+      int comparisons, exchanges;
+      comparisons = exchanges = 0;
       int numLength = 10000;
-      for(i = 1; (i </*=*/ numLength); i++)
+      for(i = 1; (i </*=*/ numLength); i++) //traverse array starting at second element
      {
-          for (j=0; j < (numLength -1); j++)
+          for (j=0; j < (numLength -1); j++) //traverse array from begininng till second to last element
          {
                 comparisons++;
-               if (num[j+1] < num[j])      // ascending order simply changes to <
+               if (num[j+1] < num[j])      // Test for ascending
               {
                     temp = num[j];             // swap elements
                     num[j] = num[j+1];
@@ -208,20 +210,23 @@ void bubbleSort(int num[])
      cout<<"Number of comparisons for a bubble sort: "<<comparisons<<endl;
      return;   //arrays are passed to functions by address; nothing is returned
 }
+//Insertion SOrt
 void insertion_sort (int arr[], int length){
 	 	int j, temp;
-	 	int comparisons, exchanges =0;
+	 	int comparisons, exchanges;
+      comparisons = exchanges = 0;
 
-	for (int i = 0; i < length; i++){
+	for (int i = 0; i < length; i++){ //traverse array
 		j = i;
 		comparisons++;
 
-		while (j > 0 && arr[j] < arr[j-1]){
-			  temp = arr[j];
+		while (j > 0 && arr[j] < arr[j-1]){ //compare elements for ascending
+			  temp = arr[j];  //swap elements
 			  arr[j] = arr[j-1];
 			  arr[j-1] = temp;
 			  j--;
 			  exchanges++;
+			  comparisons++;
 			  }
 		}
     cout<<"Number of exchanges for an insertion sort: "<<exchanges<<endl;
@@ -232,14 +237,15 @@ void quickSort(int arr[], int left, int right, int &exchanges, int &comparisons)
       int tmp;
       int pivot = arr[(left + right) / 2];
       /* partition */
+     //run until low is less than high
       while (i <= j) {
-            while (arr[i] < pivot)
+            while (arr[i] < pivot) //
                   i++;
                   comparisons++;
             while (arr[j] > pivot)
                   j--;
                   comparisons++;
-            if (i <= j) {
+            if (i <= j) { //swap elements
                   tmp = arr[i];
                   arr[i] = arr[j];
                   arr[j] = tmp;
@@ -249,25 +255,27 @@ void quickSort(int arr[], int left, int right, int &exchanges, int &comparisons)
             }
       };
       /* recursion */
-      if (left < j)
+      if (left < j) //recursion
             quickSort(arr, left, j, exchanges, comparisons);
-      if (i < right)
+      if (i < right) //recursion
             quickSort(arr, i, right, exchanges, comparisons);
      //cout<<"Number of exchanges for a quick sort: "<<exchanges<<endl;
      //cout<<"Number of comparisons for a quick sort: "<<comparisons<<endl;
 }
 void shellsort(int v[], int n)
 {
-    int comparisons, exchanges =0;
+    int comparisons, exchanges;
+      comparisons = exchanges = 0;
     int gap, i, j, temp;
-    for (gap = n/2; gap > 0; gap /= 2){
+    for (gap = n/2; gap > 0; gap /= 2){ //make gap half the length
         for (i = gap; i < n; i++){
             comparisons++;
-            for (j=i-gap; j>=0 && v[j]>v[j+gap]; j-=gap) {
-                temp = v[j];
+            for (j=i-gap; j>=0 && v[j]>v[j+gap]; j-=gap) { //compare elements that are gap distance away, decrement gap
+                temp = v[j]; //swap
                 v[j] = v[j+gap];
                 v[j+gap] = temp;
                 exchanges ++;
+                comparisons++;
             }
         }
     }
